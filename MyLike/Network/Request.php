@@ -6,6 +6,8 @@ class MyLike__Network__Request extends MyLike__ArrayObject__Magic{
 	
 	protected $referrer;
 	protected $uri_object;
+	protected $raw_post;
+	protected $array_post;
 	
 	public function referrer(){
 		if(is_null($this -> referrer)){
@@ -16,6 +18,32 @@ class MyLike__Network__Request extends MyLike__ArrayObject__Magic{
 			}
 		}
 		return $this -> referrer;
+	}
+	
+	public function getRawPost(){
+		if(is_null($this -> raw_post)){
+			$this -> raw_post = file_get_contents("php://input");
+		}
+		return $this -> raw_post;
+	}
+	
+	public function getPost(){	
+		if(is_null($this -> array_post)){
+			if(!$this -> get('CONTENT_TYPE')){
+				$data = new MyLike__Network__Query($this -> getRawPost());
+				$data = $data -> toArray();
+			} else {
+				$data = $_POST;
+			}
+			$this -> array_post = new MyLike__ArrayObject__Magic($data);
+		}
+		$arguments = func_get_args();
+		$args = MyLike__ArrayObject__Magic::processArguments($arguments);
+		if(!$args){
+			return $this -> array_post;
+		}else{
+			return $this -> array_post -> get($args);
+		}
 	}
 	
 	public function getDate($format){

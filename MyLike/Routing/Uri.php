@@ -96,12 +96,7 @@ class MyLike__Routing__Uri extends MyLike__Routing__Routing{
 			$data['main_path'] .= $main_path;
 			$data['action'] = $action;
 		}
-		if(!MyLike__Network__Request::getInstance() -> get('CONTENT_TYPE')){
-			$data['post'] = new MyLike__Network__Query(file_get_contents("php://input"));
-			$data['post'] = $data['post'] -> toArray();
-		} else {
-			$data['post'] = $_POST;
-		}
+		$data['post'] = MyLike__Network__Request::getInstance() -> getPost() -> toArray();
 		$data['args'] = $args;
 		$this -> data['data'] = new MyLike__ArrayObject__Magic($data);
 	}
