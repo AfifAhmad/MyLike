@@ -1,0 +1,69 @@
+<?php
+
+class MyLike__Network__Curl__Header{
+	protected $data = array();
+	protected $cookie;
+
+	public function __construct($data){
+		if(is_string($data)){
+			$output = explode("\r\n",$data);
+		} else {
+			$output = $data;
+		}
+		$header = array();
+		if(empty($output)){
+			$output=array();
+		}
+		foreach($output as $line){
+			if(empty($line)){
+				break;
+			}elseif(preg_match("#^((?P<key>[^\:]+)\s*:)?\s*(?P<content>.+)$#i", $line, $result)){
+				if(!empty($result['key'])){
+					if(empty($header[$result['key']])){
+						$header[$result['key']] = $result['content'];
+					}else{
+						if(!is_array($header[$result['key']])){
+							$buffer = $header[$result['key']];
+							unset($header[$result['key']]);
+							$header[$result['key']] = array($buffer, $result['content']);
+							
+						}else{
+							$header[$result['key']][] = $result['content'];
+						}
+					}
+				}else $header[] = $result['content'];
+			}
+		}
+		$this -> data = $header;
+	}
+	
+	public function test(){
+		$args = func_get_args();
+		if(array_key_exists(0, $args)){
+			if(array_key_exists($args[0], $this -> data)){
+				if(array_key_exists(1, $args)){
+					return $this -> data[$args[0]] == $args[1];
+				} else return true;
+			}else return false;
+		}
+	}
+
+	public function get(){
+		$args = func_get_args();
+		if(array_key_exists(0, $args)){
+			if(array_key_exists($args[0], $this -> data)){
+				return $this -> data[$args[0]];
+			}else return null;
+		}else return $this -> data;
+	}
+	
+
+	public function getCookie(){
+		if(!$this -> cookie){
+			$this -> cookie = new MyLike__Network__Curl__Cookie(
+				$this -> get('Set-Cookie')
+			);
+		}
+		return $this -> cookie;
+	}
+}
