@@ -2,6 +2,8 @@
 
 abstract class MyLike__View__View extends MyLike__View__Abstract{
 
+	private $last_exists;
+	
 	public function execute(){
 		if(is_null($this['base'])){
 			$this -> setVar('base', $this -> getRequest() -> base());
@@ -9,7 +11,10 @@ abstract class MyLike__View__View extends MyLike__View__Abstract{
 		if($this -> getParent() -> autoRender()){
 			$content = $this -> load();
 			if(strlen($this -> getLayout())){
-				$content = $this -> loadLayout($content);
+				$layout = $this -> loadLayout($content);
+				if($this -> last_exists){
+					$content = $layout;
+				}
 			}
 			return $content;
 		} else {
@@ -21,8 +26,7 @@ abstract class MyLike__View__View extends MyLike__View__Abstract{
 		MyLike__Autoload__Autoload::tempFileExtension($this -> getExtension());
 		$vars = $this -> getVar();
 		$vars = array_merge($vars, $variables);
-		$vars['view'] = $this;
-		$buffered = MyLike__Autoload__Autoload::buffering(
+		$buffered = $this -> buffering(
 				$this -> getLayout(),
 				MyLike__Autoload__Path::getDesignDirs($this -> getElementDirectory()),
 				$vars
@@ -34,9 +38,8 @@ abstract class MyLike__View__View extends MyLike__View__Abstract{
 	protected function loadLayout($content){
 		$vars = $this -> getVar();
 		$vars['content'] = $content;
-		$vars['view'] = $this;
 		MyLike__Autoload__Autoload::tempFileExtension($this -> getLayoutExtension());
-		$buffered = MyLike__Autoload__Autoload::buffering(
+		$buffered = $this -> buffering(
 				$this -> getLayout(),
 				MyLike__Autoload__Path::getDesignDirs($this -> getLayoutDirectory()),
 				$vars
@@ -47,9 +50,8 @@ abstract class MyLike__View__View extends MyLike__View__Abstract{
 
 	protected function load(){
 		$vars = $this -> getVar();
-		$vars['view'] = $this;
 		MyLike__Autoload__Autoload::tempFileExtension($this -> getExtension());
-		$buffered = MyLike__Autoload__Autoload::buffering(
+		$buffered = $this -> buffering(
 				$this -> getParent() -> getContentPath(),
 				MyLike__Autoload__Path::getDesignDirs($this -> getDirectory()),
 				$this -> getVar()
@@ -58,6 +60,37 @@ abstract class MyLike__View__View extends MyLike__View__Abstract{
 		return $buffered;
 	}
 	
+	public function buffering($file, $paths, $assigned_vars = array()){
+		if(!is_array($paths)){
+			$paths = array($paths);
+		}
+		$output = '';
+		foreach($paths as $path){
+			foreach(MyLike__Autoload__Autoload::fileExtension() as $ext){		
+				$full_file_path = MyLike__Autoload__Autoload::implodePath($path, $file . $ext);
+				if(file_exists($full_file_path)){
+					$output = $this -> _buffering($full_file_path, $assigned_vars);
+					$this -> setLastExist(true);
+					break;
+				} else {
+					$this -> setLastExist(false);
+				}
+			}
+		}
+		return $output;
+	}
+	
+	private function _buffering($file, $assigned_vars = array()){
+		unset($assigned_vars['file']);
+		extract($assigned_vars);
+		ob_start();
+		include $file;
+		return ob_get_clean();
+	}
+
+	private function setLastExist($param){
+		$this -> last_exists = $param;
+	}
 
 	public function getBase(){
 		return $this -> getRequest() -> base();

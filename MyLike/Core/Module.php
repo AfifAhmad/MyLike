@@ -57,7 +57,7 @@ abstract class MyLike__Core__Module extends MyLike__Core__Logic{
 			get_class($this), 
 			$result);
 		$arguments = func_get_args();
-		array_unshift($arguments, 'module/'.$result[1].'/'.$result[2]);
+		array_unshift($arguments, 'module/'.$result[1].'/'.preg_replace('#__#', '/', $result[2]));
 		return $this -> getConfig($arguments);
 	}
 	

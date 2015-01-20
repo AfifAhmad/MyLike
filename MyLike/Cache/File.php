@@ -105,7 +105,7 @@ class MyLike__Cache__File {
 				return false;
 			}
 			$this -> validateDirectory($directory);
-			if(is_writable($directory)){
+			if(is_writable(dirname($directory)) ){
 				mkdir($directory);
 			} else {
 				return false;

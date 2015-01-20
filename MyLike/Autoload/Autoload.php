@@ -14,6 +14,7 @@ class MyLike__Autoload__Autoload{
 
 	public static function handler($class){
 		$to_normal_ext_path = false;
+		$loaded = false;
 		if(array_key_exists($class, self::$_reg_class)){
 			if(is_string(self::$_reg_class[$class])){
 				$class_file = self::$_reg_class[$class];
@@ -33,42 +34,52 @@ class MyLike__Autoload__Autoload{
 				}
 			}
 		} else {
-			preg_match('#^[a-z0-9]+#i', $class, $match);
-			
-			if(!array_key_exists($match[0], self::$config)){
-				if($match[0] == 'MyLike'){
-					$autoload_config = array(
-							'path' => dirname(dirname(dirname(__FILE__))),
-							'autoload_standard' => 'mylike',
-						);
-				} else{
-					$autoload_config = array(
-							'path' => '',
-							'autoload_standard' => 'psr-0',
-						);
+			if(class_exists('MyLike__Autoload__Psr4', false)){
+				$classfile = MyLike__Autoload__Psr4::test($class);
+				self::load($classfile, false);
+			}
+			if(!self::getLastExists()){
+				preg_match('#^[a-z0-9]+#i', $class, $match);
+				
+				if(!array_key_exists($match[0], self::$config)){
+					if($match[0] == 'MyLike'){
+						$autoload_config = array(
+								'path' => dirname(dirname(dirname(__FILE__))),
+								'autoload_standard' => 'mylike',
+							);
+					} else{
+						$autoload_config = array(
+								'path' => '',
+								'autoload_standard' => 'psr-0',
+							);
+					}
+					self::$config[$match[0]] = $autoload_config;
+				} else {
+					$autoload_config = self::$config[$match[0]];
 				}
-				self::$config[$match[0]] = $autoload_config;
+				switch ($autoload_config['autoload_standard']) {
+					case 'mylike':
+						$classfile = preg_replace("#__#", DIRECTORY_SEPARATOR , $class);
+						break;
+					case 'psr-0':
+						$classfile = preg_replace("#_|\\\\#", DIRECTORY_SEPARATOR , $class);
+						break;
+					case 'adodb':
+						$classfile = preg_replace("#_#", '-' , $class.'.inc');
+						break;
+				}
+				if(!empty($autoload_config['ext'])){
+					$to_normal_ext_path = true;
+					self::tempFileExtension($autoload_config['ext']);
+				}
+				$class_file = self::implodePath( $autoload_config['path'],	$classfile);
 			} else {
-				$autoload_config = self::$config[$match[0]];
+				$loaded = true;
 			}
-			switch ($autoload_config['autoload_standard']) {
-				case 'mylike':
-					$classfile = preg_replace("#__#", DIRECTORY_SEPARATOR , $class);
-					break;
-				case 'psr-0':
-					$classfile = preg_replace("#_|\\\\#", DIRECTORY_SEPARATOR , $class);
-					break;
-				case 'adodb':
-					$classfile = preg_replace("#_#", '-' , $class.'.inc');
-					break;
-			}
-			if(!empty($autoload_config['ext'])){
-				$to_normal_ext_path = true;
-				self::tempFileExtension($autoload_config['ext']);
-			}
-			$class_file = self::implodePath( $autoload_config['path'],	$classfile);
 		}
+		if(!$loaded)
 		self::load($class_file, true);
+		
 		if($to_normal_ext_path){
 			self::defaultFileExtension(true);
 		}
@@ -82,7 +93,7 @@ class MyLike__Autoload__Autoload{
 		}
 	}
 	
-	private static function implodePath($path, $file_name){
+	public static function implodePath($path, $file_name){
 		$path = preg_replace('#[\\\\/]+$#','', $path);
 		return (strlen($path) > 0 ? $path . DIRECTORY_SEPARATOR : "") .  
 			preg_replace('#^[\\\\/]+#','', $file_name);
@@ -107,7 +118,7 @@ class MyLike__Autoload__Autoload{
 				self::setLastExist(false);
 			}
 		}
-		if($use_include_path){
+		if((!self::getLastExists()) && $use_include_path){
 			$paths = explode(PATH_SEPARATOR, get_include_path());
 			foreach($paths as $path){
 				foreach(self::fileExtension() as $ext){		

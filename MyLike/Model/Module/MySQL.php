@@ -28,7 +28,7 @@ abstract class MyLike__Model__Module__MySQL extends MyLike__Model__MySQL{
 	
 	public function getModelConfig(){
 		$arguments = func_get_args();
-		array_unshift($arguments, "module/".$this -> getModuleName(), 'model', $this -> getDbEngine(), str_replace('__', '/', $this -> getInputtedTableName()));
+		array_unshift($arguments, "module/".$this -> getModuleName() . '/model/' . $this -> getDbEngine() .'/'. str_replace('__', '/', $this -> getInputtedTableName()));
 		return $this -> getConfig($arguments);
 	}
 	

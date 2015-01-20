@@ -4,7 +4,30 @@ class MyLike__Autoload__Path{
 
 	
 	public final static function getVarsDir(){
-		return self::getAppDir(). "_vars" . DS ;
+		$app_dir = self::getAppDir();
+		if(!preg_match('#[\\\\/]$#', $app_dir)){
+			return $app_dir . "_vars" . DS;
+		} else {
+			return $app_dir . "vars" . DS;
+		}
+	}
+
+	public final static function getDesignDir(){
+		$app_dir = self::getAppDir();
+		if(!preg_match('#[\\\\/]$#', $app_dir)){
+			return $app_dir . "_design" . DS;
+		} else {
+			return $app_dir . "design" . DS;
+		}
+	}
+
+	public final static function getConfigDir(){
+		$app_dir = self::getAppDir();
+		if(!preg_match('#[\\\\/]$#', $app_dir)){
+			return $app_dir . "_config" . DS;
+		} else {
+			return $app_dir . "config" . DS;
+		}
 	}
 
 	public final static function getSessionDir(){
@@ -20,18 +43,15 @@ class MyLike__Autoload__Path{
 	public final static function getDataDir(){
 		return self::getVarsDir() . 'data' . DS;
 	}
-
-	public final static function getDesignDir(){
-		return self::getAppDir(). "_design" . DS ;
-	}
-
-	public final static function getConfigDir(){
-		return self::getAppDir()."_config" . DS;
-	}
 	
 	public final static function getAppDir(){
 		$app_namespace = MyLike__Core__Core::getAppNamespace();
-		return MyLike__Autoload__Autoload::getVendorPath($app_namespace) . DS .	$app_namespace;
+		$path = MyLike__Autoload__Psr4::getAppNamespacePath($app_namespace  . '__');
+		if($path){
+			return $path . DIRECTORY_SEPARATOR;
+		} else {
+			return MyLike__Autoload__Autoload::getVendorPath($app_namespace) . DS .	$app_namespace;
+		}
 	}
 
 	public final static function getCoreDir(){

@@ -119,8 +119,8 @@ class MyLike__Network__Request extends MyLike__ArrayObject__Magic{
 
 	public function getPort(){
 		return	($this['SERVER_PORT'] &&
-		(($this -> getHttpProtocol() === 'http' && $this['SERVER_PORT'] !== 80) ||
-		($this -> getHttpProtocol() === 'https' && $this['SERVER_PORT'] !== 443)))
+		(($this -> getHttpProtocol() === 'http' && $this['SERVER_PORT'] != 80) ||
+		($this -> getHttpProtocol() === 'https' && $this['SERVER_PORT'] != 443)))
 		? ':' . $this['SERVER_PORT'] : '';
 	}
 	

@@ -35,13 +35,21 @@ class MyLike__Core__Session extends MyLike__ArrayObject__Magic{
 			if(strlen($data)==0){
 				$data = $this -> getConfig('name');
 				if(strlen($data)>0) session_name($data);
-			}else{
+			} else {
 				session_name($data);
 			}
 		}
 		return $this;
 	}
 	
+	protected function callUseCookies(){
+		$data = $this -> usePrepareUseCookies();
+		if(!is_null($data)){
+			ini_set('session.use_cookies', (boolean) $data);
+		}
+		return $this;
+	}
+
 	protected function callHandler(){
 		$data = $this -> usePrepareHandler();
 		if($data !== false){
@@ -69,6 +77,23 @@ class MyLike__Core__Session extends MyLike__ArrayObject__Magic{
 		}
 	}
 
+	protected function callId(){
+		$data = $this -> usePrepareId();
+		if($data === ""){
+			$char[0] = "abcdefghijklmnopqrstuvwxyz";
+			$char[1] = "0123456789";
+			$string = "";
+			while(strlen($string)<26){
+				$rand = rand (0, 1);
+				$string .= $char[$rand][rand(0, strlen($char[$rand])-1)];
+			}
+			session_id($string);
+		} elseif(!is_null($data)){
+			session_id($data);
+		}
+		return $this;
+	}
+	
 	protected function callSavePath(){
 		$data = $this -> usePrepareSavePath();
 		if(!array_key_exists("save_path", $this -> _default_data)){
@@ -105,7 +130,9 @@ class MyLike__Core__Session extends MyLike__ArrayObject__Magic{
 	public function start(){
 		session_write_close();
 		$this -> callRemember()
+			  -> callId()
 			  -> callName()
+			  -> callUseCookies()
 			  -> callSavePath()
 			  -> callHandler();
 		session_start();

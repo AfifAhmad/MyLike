@@ -5,7 +5,7 @@ class MyLike__Session__File {
     private $save_path;
 	protected $session_name;
 
-    function open($save_path, $session_name){
+    public function open($save_path, $session_name){
         $this->save_path = $save_path;
         if (!is_dir($this->save_path)) {
             mkdir($this->save_path, 0777);
@@ -14,19 +14,19 @@ class MyLike__Session__File {
         return true;
     }
 
-    function close()
+    public function close()
     {
         return true;
     }
 
-    function read($id)
+    public function read($id)
     {
 		$file =  $this -> getFilePath($id);
 		if(file_exists($file))
         return (string) file_get_contents($file);
     }
 
-    function write($id, $data)
+    public function write($id, $data)
     {
 		if($data)
         return file_put_contents($this -> getFilePath($id), $data) === false ? false : true;
@@ -39,7 +39,7 @@ class MyLike__Session__File {
 		}
     }
 
-    function destroy($id)
+    public function destroy($id)
     {
         $file =  $this -> getFilePath($id);
         if (file_exists($file)) {
@@ -49,9 +49,9 @@ class MyLike__Session__File {
         return true;
     }
 
-    function gc($maxlifetime)
+	public function gc($maxlifetime)
     {
-        foreach ( glob( $this -> getFilePath() . "/*" ) as $file) {
+        foreach ( glob( $this -> getFilePath() . "*" ) as $file) {
             if (filemtime($file) + $maxlifetime < time() && file_exists($file)) {
                 unlink($file);
             }

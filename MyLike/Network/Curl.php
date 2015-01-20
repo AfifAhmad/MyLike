@@ -14,7 +14,8 @@ class MyLike__Network__Curl{
 	public function setApiEndpoint($api_endpoint){
 		$urlarray = parse_url($api_endpoint);
 		$this -> api_endpoint = (!empty($urlarray['scheme']) ? $urlarray['scheme'] : 'http' ).'://'.
-			(!empty($urlarray['host']) ? $urlarray['host'] : MyLike__Network__Request::getObject() -> get('HTTP_HOST')) . $urlarray['path'];
+			(!empty($urlarray['host']) ? $urlarray['host'] : MyLike__Network__Request::getObject() -> get('HTTP_HOST')) . 
+			(array_key_exists('path', $urlarray) ? $urlarray['path'] : "" );
 		return $this -> setQuery(empty($urlarray['query']) ? "": $urlarray['query']);
 	}
 

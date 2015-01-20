@@ -1,6 +1,6 @@
 <?php
 
-class MyLike__Config__CSV  extends MyLike__ArrayObject__Magic{
+class MyLike__Config__Json  extends MyLike__ArrayObject__Magic{
 
 	protected static $cache = array();
 
@@ -26,7 +26,7 @@ class MyLike__Config__CSV  extends MyLike__ArrayObject__Magic{
 		$path = preg_replace("#[\////]+#",DS, $path);
 		if(!array_key_exists($path, self::$cache)){
 			$data_dir = MyLike__Autoload__Path::getDataDir();
-			$new_extension = explode(',', MyLike__Autoload__Path::getNewExtension('.csv'));
+			$new_extension = explode(',', MyLike__Autoload__Path::getNewExtension('.json'));
 			$found = false;
 			foreach($new_extension as $ext){
 				$file = $data_dir . $path . $ext;
