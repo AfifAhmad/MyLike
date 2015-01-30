@@ -39,8 +39,7 @@ class MyLike__Cache__File {
 	public function get(){
 		if($this -> file){
 			if($this -> useDefaultPath()){
-				return MyLike__Autoload__Path::getVarsDir()
-					. 'temp' . DS . $this -> file;
+				return MyLike__Autoload__Path::getTempDir() . $this -> file;
 			} else {
 				return $this -> file;
 			}

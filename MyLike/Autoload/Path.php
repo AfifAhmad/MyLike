@@ -33,6 +33,10 @@ class MyLike__Autoload__Path{
 	public final static function getSessionDir(){
 		return self::getVarsDir() . 'session' . DS;
 	}
+
+	public final static function getTempDir(){
+		return self::getVarsDir() . 'temp' . DS;
+	}
 	
 	public final static function getNewExtension($ext){
 		$ext = preg_replace('#\.php(,)|\.php$#', $ext.'\1',
