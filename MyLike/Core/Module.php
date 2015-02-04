@@ -87,28 +87,33 @@ abstract class MyLike__Core__Module extends MyLike__Core__Logic{
 	}
 
 	protected function setViewClass($class){
-		$class = preg_replace('#[\\\\/]#','__',$class);
-		$this["view_object"] = null;
-		if(!$this["view_class"]){
-			$this["view_class"] = null;
-		} 
-		
-		$app_namespace = $this -> getAppNamespace();
-		
-		$vclass = $app_namespace . "__Module__".$this -> getModuleName() . "__View__" . $class;
-
-		if(class_exists($vclass)){
-			$this["view_class"] = $vclass;
+		$arguments = func_get_args();
+		if(array_key_exists(1, $arguments)) {
+			$this["view_class"] = $arguments[0] . "__View__" . preg_replace('#[/\\\\]+#','__',$arguments[1]);
 		} else {
-			$vclass = $app_namespace . "__View__" . $class;
+			$class = preg_replace('#[\\\\/]#','__',$class);
+			$this["view_object"] = null;
+			if(!$this["view_class"]){
+				$this["view_class"] = null;
+			} 
+			
+			$app_namespace = $this -> getAppNamespace();
+			
+			$vclass = $app_namespace . "__Module__".$this -> getModuleName() . "__View__" . $class;
+
 			if(class_exists($vclass)){
 				$this["view_class"] = $vclass;
-			}else{
-				$vclass = "MyLike__View__".$class;
+			} else {
+				$vclass = $app_namespace . "__View__" . $class;
 				if(class_exists($vclass)){
 					$this["view_class"] = $vclass;
-				} else {
-					$this -> getViewClass();
+				}else{
+					$vclass = "MyLike__View__".$class;
+					if(class_exists($vclass)){
+						$this["view_class"] = $vclass;
+					} else {
+						$this -> getViewClass();
+					}
 				}
 			}
 		}
