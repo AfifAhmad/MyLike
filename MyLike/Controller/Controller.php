@@ -53,21 +53,27 @@ abstract class MyLike__Controller__Controller extends MyLike__Core__Logic{
 	}
 
 	protected function setViewClass($class){
-		$class = preg_replace('#[\\\\/]#','__',$class);
-		$this["view_object"] = null;
-		if(!$this["view_class"]){
-			$this["view_class"] = null;
-		}
-		$vclass = $this -> getAppNamespace() . "__View__" . $class;
-
-		if(class_exists($vclass)){
-			$this["view_class"] = $vclass;
+		$arguments = func_get_args();
+		if(array_key_exists(1, $arguments)){
+			$this["view_class"] = $arguments[0] . "__View__" . 
+				preg_replace('#[\\\\/]#','__',$arguments[0]);
 		} else {
-			$vclass = "MyLike__View__".$class;
+			$class = preg_replace('#[\\\\/]#','__',$class);
+			$this["view_object"] = null;
+			if(!$this["view_class"]){
+				$this["view_class"] = null;
+			}
+			$vclass = $this -> getAppNamespace() . "__View__" . $class;
+
 			if(class_exists($vclass)){
 				$this["view_class"] = $vclass;
 			} else {
-				$this -> getViewClass();
+				$vclass = "MyLike__View__".$class;
+				if(class_exists($vclass)){
+					$this["view_class"] = $vclass;
+				} else {
+					$this -> getViewClass();
+				}
 			}
 		}
 		return $this;
