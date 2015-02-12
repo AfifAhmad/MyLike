@@ -20,4 +20,5 @@ if(isset($psr4)){
 } else {
 	MyLike__Autoload__Autoload::setConfig($app_namespace, dirname(dirname(dirname(__FILE__))) . DS . 'apps', 'mylike');
 }
+set_include_path( dirname(dirname(dirname(__FILE__))) . DS . 'apps' . PS . get_include_path());
 echo MyLike__Core__Core::dispatch($app_namespace);
