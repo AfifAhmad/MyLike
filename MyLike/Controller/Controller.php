@@ -15,7 +15,7 @@ abstract class MyLike__Controller__Controller extends MyLike__Core__Logic{
 			$content_directory =  $this -> getPluginId();
 		}
 		$this["content_directory"] = preg_replace("#[/\\\\]+#",'__',$content_directory);
-		$this -> before_execute();
+		$this -> actionBefore();
 	}
 	
 
@@ -39,17 +39,17 @@ abstract class MyLike__Controller__Controller extends MyLike__Core__Logic{
 		return $this -> getRouter() -> route($args);
 	}
 
-	public function before_execute(){
+	public function actionBefore(){
 	}
 
 	public function process(){
 		if(!$this -> skipAction()){
-			$this -> execute();
+			$this -> action();
 		}
-		$this -> after_execute();
+		$this -> actionAfter();
 	}
 
-	public function after_execute(){
+	public function actionAfter(){
 	}
 
 	protected function setViewClass($class){

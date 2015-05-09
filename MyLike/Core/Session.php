@@ -25,7 +25,7 @@ class MyLike__Core__Session extends MyLike__ArrayObject__Magic{
 			} else {
 				ini_set('session.cookie_lifetime', 0);
 			}
-		}
+		} 
 		return $this;
 	}
 	

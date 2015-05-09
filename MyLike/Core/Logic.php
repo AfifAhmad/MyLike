@@ -1,11 +1,10 @@
 <?php
 
-abstract class MyLike__Core__Logic extends MyLike__Core__MVC {
+abstract class MyLike__Core__Logic extends MyLike__Core__LogicView {
 
 	protected $content = false;
 	protected $default_view_class;
 	protected $default_view_directory;
-	const DEFAULT_DB_ENGINE = "MySQL";
 
 	public function autoRender(){
 		$args = func_get_args();
@@ -17,16 +16,6 @@ abstract class MyLike__Core__Logic extends MyLike__Core__MVC {
 		}else{
 			return $this["autorender"];
 		}
-	}
-	
-	protected function model(){
-		$db_engine = $this["db_engine"] ? $this["db_engine"] : MyLike__Config__Config::getPluginData("core","db_engine");
-		if(!$db_engine){
-			$db_engine = self::DEFAULT_DB_ENGINE;
-		}
-		$arguments = func_get_args();
-		$arguments[0] = $db_engine. "\\".$arguments[0];
-		return $this -> getModel($arguments);
 	}
 
 	public function setViewVar($var = null, $content = null){
@@ -141,18 +130,10 @@ abstract class MyLike__Core__Logic extends MyLike__Core__MVC {
 	}
 	
 	public function toHtml(){
+		if($this -> autoRender())
 		return $this -> getViewObject() -> execute();
-	}
-
-	public function setDbConfig($arguments){
-		if(is_string($arguments)){
-			$this['db_config'] = $arguments;
-			return $this;
-		}
-		if(!array_key_exists(1, $arguments) && $this["db_config"]){
-			$arguments[1] = $this["db_config"];
-		}
-		return $arguments;
+		else
+		return "";
 	}
 
 	public function setLayout($layout){

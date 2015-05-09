@@ -6,7 +6,7 @@ class MyLike__Controller__Api extends MyLike__Controller__Controller{
 	public function process(){	
 		$act = $this -> getRoute('action');
 		if(strlen($act) > 0 ) {
-			$action_function = "action_".$this -> getRoute('action');
+			$action_function = $this -> getRoute('action')."Action";
 			$this -> setExtendedContent($this -> getRoute('action'));
 		}else{
 			$action_function = "execute";
@@ -23,7 +23,7 @@ class MyLike__Controller__Api extends MyLike__Controller__Controller{
 			else 
 			$this -> $action_function();
 		}
-		$this -> after_execute();
+		$this -> actionAfter();
 	}
 
 }

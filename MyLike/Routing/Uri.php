@@ -50,7 +50,7 @@ class MyLike__Routing__Uri extends MyLike__Routing__Routing{
 			if(class_exists($app_namespace . $controller)){
 				$fix_controller = $controller;
 				$cpath = preg_replace('#^/#','',$routed);
-				if(!empty($args) && method_exists($app_namespace . $controller, 'action_'.$args[0])){
+				if(!empty($args) && method_exists($app_namespace . $controller, $args[0].'Action')){
 					$main_path = '/'.$args[0];
 					$action = $args[0];
 					array_shift($args);
@@ -70,7 +70,7 @@ class MyLike__Routing__Uri extends MyLike__Routing__Routing{
 				$cpath = $routed;
 			}
 			if(class_exists($app_namespace . $controller) && !empty($args) 
-				&& method_exists($app_namespace . $controller, 'action_'.$args[0])){
+				&& method_exists($app_namespace . $controller, $args[0].'Action')){
 				$fix_controller = $controller;
 				$cpath = $routed;
 				$main_path = '/'.$args[0];

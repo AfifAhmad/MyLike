@@ -109,7 +109,7 @@ class MyLike__Autoload__Autoload{
 
 	public static function load($file, $use_include_path = false){
 		$vars = array();
-		foreach(self::fileExtension() as $ext){		
+		foreach(self::fileExtension() as $ext){	
             if(file_exists($file . $ext)){
 				$vars = self::_load($file . $ext);
 				self::setLastExist(true);
@@ -173,6 +173,8 @@ class MyLike__Autoload__Autoload{
 		$fileExt = self::tempFileExtension();
 		if(strlen($fileExt)==0){
 			$fileExt = self::defaultFileExtension();
+		} else {
+			self::defaultFileExtension(true);
 		}
 		return preg_split('#,\s*#',$fileExt);
 	}

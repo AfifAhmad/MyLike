@@ -1,6 +1,6 @@
 <?php
 
-abstract class MyLike__View__Abstract extends MyLike__Core__MVC{
+abstract class MyLike__View__Abstract extends MyLike__Core__LogicView{
 
 
 	protected $parent;

@@ -128,6 +128,9 @@ abstract class MyLike__ORM__MySQL{
 	}
 
 	protected function escape($value){
+		if(is_null($value))
+		return "NULL";
+		else
 		return $this -> getParent() -> qstr($value);
 	}
 

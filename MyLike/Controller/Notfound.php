@@ -5,16 +5,16 @@ class MyLike__Controller__Notfound  extends MyLike__Controller__Web{
 	public function execute(){
 	}
 	
-	public function before_execute(){
+	public function actionBefore(){
 		$this -> autoRender(false);
 	}
 
-	public function after_execute(){
+	public function actionAfter(){
 		$this -> getViewObject() -> setRespondCode(404);
 	}
 	
 	public function process(){
 		$this -> execute();
-		$this -> after_execute();
+		$this -> actionAfter();
 	}
 }

@@ -27,11 +27,10 @@ abstract class MyLike__View__View extends MyLike__View__Abstract{
 		$vars = $this -> getVar();
 		$vars = array_merge($vars, $variables);
 		$buffered = $this -> buffering(
-				$this -> getLayout(),
+				$path,
 				MyLike__Autoload__Path::getDesignDirs($this -> getElementDirectory()),
 				$vars
 			);
-		MyLike__Autoload__Autoload::defaultFileExtension(true);
 		return $buffered;
 	}
 
@@ -44,7 +43,6 @@ abstract class MyLike__View__View extends MyLike__View__Abstract{
 				MyLike__Autoload__Path::getDesignDirs($this -> getLayoutDirectory()),
 				$vars
 			);
-		MyLike__Autoload__Autoload::defaultFileExtension(true);
 		return $buffered;
 	}
 
@@ -56,7 +54,6 @@ abstract class MyLike__View__View extends MyLike__View__Abstract{
 				MyLike__Autoload__Path::getDesignDirs($this -> getDirectory()),
 				$this -> getVar()
 			);
-		MyLike__Autoload__Autoload::defaultFileExtension(true);
 		return $buffered;
 	}
 	
