@@ -5,6 +5,7 @@ class MyLike__Core__Session extends MyLike__ArrayObject__Magic{
 	private $handler;
 	protected $_prepare_data = array();
 	protected $_default_data = array();
+	protected $is_started = false;
 	protected static $instance;
 	const DEFAULT_CLASS_HANDLER = "File";
 	
@@ -127,15 +128,18 @@ class MyLike__Core__Session extends MyLike__ArrayObject__Magic{
 		return MyLike__Config__Config::getPluginData("session", $key);
 	}
 
-	public function start(){
-		session_write_close();
-		$this -> callRemember()
-			  -> callId()
-			  -> callName()
-			  -> callUseCookies()
-			  -> callSavePath()
-			  -> callHandler();
-		session_start();
+	public function start($force_start = false){
+		if($force_start || $this -> is_started === false){
+			session_write_close();
+			$this -> callRemember()
+				  -> callId()
+				  -> callName()
+				  -> callUseCookies()
+				  -> callSavePath()
+				  -> callHandler();
+			session_start();
+			$this -> is_started = true;
+		}
 		$this -> data = &$_SESSION;
 		return $this;
 	}
