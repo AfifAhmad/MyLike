@@ -156,7 +156,11 @@ class MyLike__Model__Model extends MyLike__Core__MVC{
 				return $return;
 			}
 		} else {
-			return $error_fields; 
+			if(!$humanize){
+				return $error_fields; 
+			} else {
+				return "";
+			}
 		}
 	}
 
