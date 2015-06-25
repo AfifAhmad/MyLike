@@ -134,7 +134,7 @@ class MyLike__Model__Model extends MyLike__Core__MVC{
 			}
 			if(!$humanize){
 				return $error_fields; 
-			} else {
+			} elseif($humanize==1) {
 				$error_readable = array();
 				foreach($error_fields as $field){
 					$newcaption = $this -> getModelConfig(
@@ -154,11 +154,26 @@ class MyLike__Model__Model extends MyLike__Core__MVC{
 					$return = $last_field;
 				}
 				return $return;
+			} elseif($humanize==2) {
+				$error_readable = array();
+				foreach($error_fields as $field){
+					$newcaption = $this -> getModelConfig(
+							'humanize_sentence', 
+							MyLike__Lang__Lang::getCurrent(),
+							$field
+						);
+					if($newcaption){
+						$error_readable[] = $newcaption;
+					} else {
+						$error_readable[] = $field;
+					}
+				}
+				return $error_readable;
 			}
 		} else {
-			if(!$humanize){
+			if(!$humanize || $humanize==2){
 				return $error_fields; 
-			} else {
+			} elseif($humanize==1) {
 				return "";
 			}
 		}
