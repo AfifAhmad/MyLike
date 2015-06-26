@@ -153,7 +153,13 @@ class MyLike__Core__Session extends MyLike__ArrayObject__Magic{
 			$this -> set('notification', $key, array());
 		}
 		$buffer = $this['notification'];
-		$buffer[$key][] = $message;
+		if(is_array($message)){
+			foreach($message as $msg){
+				$buffer[$key][] = $msg;
+			}
+		} else {
+			$buffer[$key][] = $message;
+		}
 		$this['notification'] = $buffer;
 		return $this;
 	}

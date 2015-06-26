@@ -67,6 +67,18 @@ class MyLike__Model__MySQL extends MyLike__Model__Model{
 			return "`{$this -> getTableName()}` AS `{$this -> getTableAlias()}`";
 		}
 	}
+	
+	public function id(){
+		$args = func_get_args();
+		if(array_key_exists(0, $args)){
+			$this -> reset();
+			$this['id'] = $args[0];
+			return $this;
+		} else {
+			if(!$this['id']) return 0;
+			else return $this['id'];
+		}
+	}
 
 	public function editArray($values){
 		$isvalid = $this -> validate($values, "update");
