@@ -55,6 +55,7 @@ class MyLike__Model__Model extends MyLike__Core__MVC{
 				if(array_key_exists($field, $values)
 					&&!is_object($values[$field])
 					&&!is_array($values[$field])){
+					if(is_string($values[$field]))
 					$values[$field] = trim((string)$values[$field]);
 					if(is_null($callback)||is_bool($callback)){
 						$output[$field] = $values[$field];

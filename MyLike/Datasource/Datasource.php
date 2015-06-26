@@ -29,7 +29,7 @@ class MyLike__Datasource__Datasource {
 				}
 				return self::$module_models[$module_name][$db_engine][$model][$db_config];
 			} else {
-				return $this -> getModel($db_engine.'/'.$model, $db_config);
+				return self::getModel($db_engine.'/'.$model, $db_config);
 			}
 		} else {
 			return null;
