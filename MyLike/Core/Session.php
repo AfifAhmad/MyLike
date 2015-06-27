@@ -16,6 +16,14 @@ class MyLike__Core__Session extends MyLike__ArrayObject__Magic{
 		return self::$instance;
 	}
 	
+	protected function callCookiePath(){
+		$data = $this -> usePrepareCookiePath();
+		if(!is_null($data)){
+			ini_set('session.cookie_path', $data);
+		} 
+		return $this;
+	}
+	
 	protected function callRemember(){
 		$data = $this -> usePrepareRemember();
 		if(!is_null($data)){
@@ -134,6 +142,7 @@ class MyLike__Core__Session extends MyLike__ArrayObject__Magic{
 			$this -> callRemember()
 				  -> callId()
 				  -> callName()
+				  -> callCookiePath()
 				  -> callUseCookies()
 				  -> callSavePath()
 				  -> callHandler();
