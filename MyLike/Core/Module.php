@@ -16,7 +16,7 @@ abstract class MyLike__Core__Module extends MyLike__Core__Logic{
 	}
 	
 	public static function resolve($module, $logic){
-		$logic_index = preg_replace('#\\\\/#','__', $logic);
+		$logic_index = preg_replace('#[\\\\/]#','__', $logic);
 		if(empty(self::$list[$module]) || !array_key_exists($logic_index,self::$list[$module])){
 			$class = MyLike__Core__Core::getAppNamespace() . '__Module__' . $module . '__Logic__' . 
 				$logic_index;

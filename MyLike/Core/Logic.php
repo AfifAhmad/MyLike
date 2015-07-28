@@ -40,7 +40,12 @@ abstract class MyLike__Core__Logic extends MyLike__Core__LogicView {
 	}
 
 	public function getViewVar(){
-		return $this -> getViewObject() -> getVar();
+		$arguments = func_get_args();
+		if(!array_key_exists(0, $arguments)){
+			return $this -> getViewObject() -> getVar();
+		} else {
+			return $this -> getViewObject() -> getVar($arguments[0]);
+		}
 	}
 	
 	protected function addExtendedContent($name){

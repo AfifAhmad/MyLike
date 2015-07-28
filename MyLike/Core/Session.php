@@ -28,7 +28,7 @@ class MyLike__Core__Session extends MyLike__ArrayObject__Magic{
 		$data = $this -> usePrepareRemember();
 		if(!is_null($data)){
 			if($data === true ){
-				ini_set('session.cookie_lifetime', $this -> getConfig("remember_time"));
+				ini_set('session.cookie_lifetime', $this -> getRememberTime());
 			}elseif(preg_match("#^[0-9]+$#", $data)){
 				ini_set('session.cookie_lifetime', $data);
 			} else {
@@ -134,6 +134,15 @@ class MyLike__Core__Session extends MyLike__ArrayObject__Magic{
 	
 	public function getConfig($key){
 		return MyLike__Config__Config::getPluginData("session", $key);
+	}
+	
+	private function getRememberTime()
+	{
+		$rtime = $this -> getConfig("remember_time");
+		if(is_null($rtime)){
+			$rtime = 1296000;
+		}
+		return $rtime;
 	}
 
 	public function start($force_start = false){

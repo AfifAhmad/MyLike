@@ -30,10 +30,15 @@ abstract class MyLike__View__Abstract extends MyLike__Core__LogicView{
 	}
 	
 	protected function getVar(){
-		if(is_null($this["var"])){
-			$this["var"] = array();
+		$arguments = func_get_args();
+		if(!array_key_exists(0, $arguments)){
+			if(is_null($this["var"])){
+				$this["var"] = array();
+			}
+			return $this["var"];
+		} else {
+			return $this -> get('var', $arguments[0]);
 		}
-		return $this["var"];
 	}
 
 	private static function loadConfig(){

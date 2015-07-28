@@ -3,6 +3,7 @@
 
 abstract class MyLike__Crypt__Base {
 
+    protected $key;
     protected $mode;
     protected $block_size = 16;
     protected $iv;
